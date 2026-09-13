@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LAMSA | Fine Jewelry & Accessories</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Montserrat & Cormorant Garamond -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Montserrat', 'sans-serif'],
+            serif: ['"Cormorant Garamond"', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-thumb { background: #d4d4d4; border-radius: 4px; }
+  </style>
+</head>
+<body class="font-sans text-neutral-800 bg-white antialiased selection:bg-neutral-900 selection:text-white">
+
+  <!-- Top Announcement Bar -->
+  <div class="bg-neutral-950 text-white text-[11px] tracking-widest text-center py-2.5 px-4 uppercase font-medium">
+    Complimentary Express Shipping Across Egypt • 100% Stainless Steel & Waterproof
+  </div>
+
+  <!-- Header / Navigation -->
+  <header class="border-b border-neutral-100 sticky top-0 bg-white/95 backdrop-blur-md z-30 shadow-[0_1px_10px_rgba(0,0,0,0.02)]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <div class="flex items-center gap-3">
+        <a href="#" class="font-serif text-3xl sm:text-4xl font-bold tracking-widest uppercase text-neutral-950">LAMSA</a>
+      </div>
+
+      <!-- Nav Links -->
+      <nav class="hidden md:flex items-center space-x-8 text-xs uppercase tracking-widest text-neutral-600 font-medium">
+        <button onclick="filterCategory('all')" class="hover:text-black transition">All</button>
+        <button onclick="filterCategory('rings')" class="hover:text-black transition">Rings</button>
+        <button onclick="filterCategory('handchains')" class="hover:text-black transition">Hand Chains</button>
+        <button onclick="filterCategory('necklaces')" class="hover:text-black transition">Necklaces</button>
+      </nav>
+
+      <!-- Cart Button -->
+      <div class="flex items-center gap-4">
+        <button onclick="toggleCart()" class="relative text-neutral-900 hover:text-neutral-600 transition flex items-center gap-2 bg-neutral-50 px-3.5 py-2 rounded-full border border-neutral-200">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+          </svg>
+          <span class="text-xs font-bold" id="cartCount">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative bg-[#fbf9f6] py-16 sm:py-20 border-b border-neutral-100 text-center">
+    <div class="max-w-3xl mx-auto px-4">
+      <p class="text-xs uppercase tracking-[0.3em] text-neutral-400 font-medium mb-3">Refined & Minimalist Gold</p>
+      <h1 class="font-serif text-4xl sm:text-6xl font-light text-neutral-900 mb-4">The Golden Edit</h1>
+      <p class="text-neutral-500 text-sm max-w-lg mx-auto leading-relaxed">
+        Discover statement rings, ethereal hand chains, and radiant pendants crafted for every meaningful moment.
+      </p>
+    </div>
+  </section>
+
+  <!-- Main Collection -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    
+    <!-- Mobile Categories & Counter -->
+    <div class="flex items-center justify-between border-b border-neutral-200 pb-4 mb-8 text-xs uppercase tracking-wider text-neutral-500">
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 md:hidden">
+        <button onclick="filterCategory('all')" class="bg-neutral-900 text-white px-3 py-1.5 rounded">All</button>
+        <button onclick="filterCategory('rings')" class="bg-neutral-100 px-3 py-1.5 rounded">Rings</button>
+        <button onclick="filterCategory('handchains')" class="bg-neutral-100 px-3 py-1.5 rounded">Hand Chains</button>
+        <button onclick="filterCategory('necklaces')" class="bg-neutral-100 px-3 py-1.5 rounded">Necklaces</button>
+      </div>
+      <span id="itemsCounter" class="text-neutral-400">Showing 9 Products</span>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-x-6 gap-y-12" id="productsGrid">
+      <!-- Rendered via JS -->
+    </div>
+  </main>
+
+  <!-- Slide-out Cart Drawer -->
+  <div id="cartModal" class="fixed inset-0 z-50 invisible transition-all duration-300">
+    <div id="cartBackdrop" onclick="toggleCart()" class="absolute inset-0 bg-black/40 opacity-0 transition-opacity"></div>
+    
+    <div id="cartPanel" class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-2xl translate-x-full transition-transform flex flex-col justify-between overflow-hidden">
+      
+      <!-- Drawer Header -->
+      <div class="p-5 border-b border-neutral-100 flex items-center justify-between bg-neutral-50">
+        <div class="flex items-center gap-2">
+          <h2 class="font-serif text-xl font-medium tracking-wide text-neutral-900">Shopping Bag</h2>
+          <span class="text-xs bg-neutral-200 px-2 py-0.5 rounded-full font-bold" id="drawerCartCount">0</span>
+        </div>
+        <button onclick="toggleCart()" class="text-neutral-400 hover:text-neutral-900 text-lg">✕</button>
+      </div>
+
+      <!-- Drawer Content -->
+      <div class="p-5 overflow-y-auto flex-1 space-y-6">
+        <div>
+          <h3 class="text-xs uppercase tracking-widest text-neutral-400 mb-3 font-medium">Selected Items:</h3>
+          <div id="cartItems" class="space-y-3">
+            <p class="text-xs text-neutral-400 text-center py-8">Your bag is currently empty.</p>
+          </div>
+        </div>
+
+        <!-- Checkout Form -->
+        <div id="orderFormContainer" class="border-t border-neutral-200 pt-5 space-y-3 hidden">
+          <h3 class="text-xs uppercase tracking-widest text-neutral-900 font-bold">Shipping Details:</h3>
+          
+          <div>
+            <label class="block text-[11px] uppercase tracking-wider font-semibold text-neutral-600 mb-1">Full Name *</label>
+            <input type="text" id="custName" placeholder="Enter your full name" class="w-full text-xs p-2.5 border border-neutral-300 rounded focus:border-black focus:outline-none" />
+          </div>
+
+          <div>
+            <label class="block text-[11px] uppercase tracking-wider font-semibold text-neutral-600 mb-1">Mobile Number (WhatsApp) *</label>
+            <input type="tel" id="custPhone" placeholder="010XXXXXXXX" class="w-full text-xs p-2.5 border border-neutral-300 rounded focus:border-black focus:outline-none" />
+          </div>
+
+          <div>
+            <label class="block text-[11px] uppercase tracking-wider font-semibold text-neutral-600 mb-1">Governorate *</label>
+            <select id="custGov" onchange="updateTotalWithShipping()" class="w-full text-xs p-2.5 border border-neutral-300 rounded focus:border-black focus:outline-none bg-white">
+              <option value="50">Cairo (Shipping 50 EGP)</option>
+              <option value="50">Giza (Shipping 50 EGP)</option>
+              <option value="70">Alexandria (Shipping 70 EGP)</option>
+              <option value="70">Delta & Canal Governorates (Shipping 70 EGP)</option>
+              <option value="70">Upper Egypt Governorates (Shipping 70 EGP)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-[11px] uppercase tracking-wider font-semibold text-neutral-600 mb-1">Detailed Address *</label>
+            <textarea id="custAddress" rows="2" placeholder="Street, Building No, Apartment No" class="w-full text-xs p-2.5 border border-neutral-300 rounded focus:border-black focus:outline-none"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Summary & Checkout Button -->
+      <div class="p-5 border-t border-neutral-100 bg-neutral-50">
+        <div class="space-y-1.5 text-xs mb-4">
+          <div class="flex justify-between text-neutral-500">
+            <span>Subtotal:</span>
+            <span id="cartSubtotal">0 EGP</span>
+          </div>
+          <div class="flex justify-between text-neutral-500">
+            <span>Shipping:</span>
+            <span id="shippingCost">50 EGP</span>
+          </div>
+          <div class="flex justify-between text-sm font-bold text-neutral-900 pt-2 border-t border-neutral-200">
+            <span>Total:</span>
+            <span id="cartFinalTotal">50 EGP</span>
+          </div>
+        </div>
+
+        <button onclick="submitOrderViaWhatsApp()" class="w-full bg-neutral-950 text-white uppercase text-xs tracking-widest py-3.5 font-medium hover:bg-neutral-800 transition">
+          Complete Order via WhatsApp
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating WhatsApp Button -->
+  <a href="https://wa.me/201060746804?text=Hello%20LAMSA,%20I%20have%20an%20inquiry%20about%20your%20products." target="_blank" class="fixed bottom-6 right-6 z-40 bg-emerald-600 hover:bg-emerald-700 text-white p-3.5 rounded-full shadow-lg flex items-center justify-center transition hover:scale-110">
+    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+  </a>
+
+  <!-- Footer -->
+  <footer class="bg-[#fafafa] border-t border-neutral-200 mt-20 py-12 text-center text-xs">
+    <p class="font-serif text-2xl tracking-widest uppercase mb-2">LAMSA</p>
+    <p class="text-neutral-400 mb-4 uppercase tracking-wider">Cairo, Egypt • High Grade Stainless Steel Jewelry</p>
+    <p class="text-[11px] text-neutral-400">© 2026 LAMSA Store. Showcase Edition.</p>
+  </footer>
+
+  <script>
+    // رابط الـ API المربوط بالشيت الخاص بكِ
+    const SHEET_API_URL = "https://opensheet.elk.sh/18Ryuej8VqzUBh0KuG08W432MmintdMk3jRgL1etR9F0/Sheet1";
+
+    let products = [];
+    let cart = [];
+    let currentCategory = 'all';
+
+    // 1. جلب المنتجات من شيت جوجل
+    async function fetchProducts() {
+      const grid = document.getElementById('productsGrid');
+      grid.innerHTML = '<p class="col-span-full text-center text-xs text-neutral-400 py-12">Loading collection...</p>';
+      
+      try {
+        const response = await fetch(SHEET_API_URL);
+        const data = await response.json();
+        
+        // قراءة وتنسيق البيانات من الشيت
+        products = data.map(item => ({
+          id: Number(item.Id || item.id),
+          name: (item.Name || item.name || '').trim(),
+          category: (item.Category || item.category || '').toLowerCase().trim(),
+          price: Number(item.Price || item.price || item.pricee),
+          image: (item.Image || item.image || 'images/ring-1.jpg').trim()
+        }));
+
+        renderProducts();
+      } catch (error) {
+        console.error("Error loading products:", error);
+        grid.innerHTML = '<p class="col-span-full text-center text-xs text-red-500 py-12">Failed to load products from Sheet.</p>';
+      }
+    }
+
+    // 2. عرض كروت المنتجات على الصفحة
+    function renderProducts() {
+      const grid = document.getElementById('productsGrid');
+      const filtered = currentCategory === 'all' 
+        ? products 
+        : products.filter(p => p.category === currentCategory);
+
+      document.getElementById('itemsCounter').innerText = `Showing ${filtered.length} Products`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '<p class="col-span-full text-center text-xs text-neutral-400 py-12">No items found in this category.</p>';
+        return;
+      }
+
+      grid.innerHTML = filtered.map(product => `
+        <div class="group flex flex-col">
+          <div class="relative overflow-hidden bg-[#f7f7f7] aspect-[3/4] mb-3 rounded-sm">
+            <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover object-center group-hover:scale-105 transition duration-500" onerror="this.src='images/ring-1.jpg'">
+            <button onclick="addToCart(${product.id})" class="absolute bottom-0 inset-x-0 bg-white/95 backdrop-blur-sm text-neutral-900 py-3 text-xs tracking-widest uppercase font-medium translate-y-full group-hover:translate-y-0 transition duration-300 hover:bg-black hover:text-white">
+              Add To Bag
+            </button>
+          </div>
+          <span class="text-[10px] uppercase tracking-widest text-neutral-400 mb-1">${product.category}</span>
+          <h3 class="font-normal text-sm text-neutral-900 mb-1 group-hover:underline">${product.name}</h3>
+          <p class="text-xs text-neutral-500 font-medium">LE ${product.price}.00 EGP</p>
+        </div>
+      `).join('');
+    }
+
+    // 3. فلترة الفئات (خواتم، كفوف، سلاسل)
+    function filterCategory(cat) {
+      currentCategory = cat;
+      renderProducts();
+    }
+
+    // 4. فتح وإغلاق سلة التسوق الجانبية
+    function toggleCart() {
+      const modal = document.getElementById('cartModal');
+      const panel = document.getElementById('cartPanel');
+      const backdrop = document.getElementById('cartBackdrop');
+
+      if (modal.classList.contains('invisible')) {
+        modal.classList.remove('invisible');
+        setTimeout(() => {
+          backdrop.classList.add('opacity-100');
+          panel.classList.remove('translate-x-full');
+        }, 10);
+      } else {
+        backdrop.classList.remove('opacity-100');
+        panel.classList.add('translate-x-full');
+        setTimeout(() => modal.classList.add('invisible'), 300);
+      }
+    }
+
+    // 5. إضافة عنصر للسلة
+    function addToCart(productId) {
+      const item = products.find(p => p.id === productId);
+      if (item) {
+        cart.push(item);
+        updateCartUI();
+        toggleCart();
+      }
+    }
+
+    // 6. حذف عنصر من السلة
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCartUI();
+    }
+
+    // 7. تحديث واجهة السلة والحسابات
+    function updateCartUI() {
+      document.getElementById('cartCount').innerText = cart.length;
+      document.getElementById('drawerCartCount').innerText = cart.length;
+      const cartItemsContainer = document.getElementById('cartItems');
+      const formContainer = document.getElementById('orderFormContainer');
+
+      if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p class="text-xs text-neutral-400 text-center py-8">Your bag is currently empty.</p>';
+        formContainer.classList.add('hidden');
+        document.getElementById('cartSubtotal').innerText = 'LE 0.00 EGP';
+        document.getElementById('cartFinalTotal').innerText = 'LE 0.00 EGP';
+        return;
+      }
+
+      formContainer.classList.remove('hidden');
+
+      let subtotal = 0;
+      cartItemsContainer.innerHTML = cart.map((item, index) => {
+        subtotal += item.price;
+        return `
+          <div class="flex items-center gap-3 py-2 border-b border-neutral-50">
+            <img src="${item.image}" class="w-14 h-14 object-cover" onerror="this.src='images/ring-1.jpg'">
+            <div class="flex-1">
+              <h4 class="text-xs font-medium text-neutral-900">${item.name}</h4>
+              <p class="text-[11px] text-neutral-500">LE ${item.price}.00 EGP</p>
+            </div>
+            <button onclick="removeFromCart(${index})" class="text-xs text-neutral-400 hover:text-black">✕</button>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('cartSubtotal').innerText = `LE ${subtotal}.00 EGP`;
+      updateTotalWithShipping();
+    }
+
+    // 8. حساب الشحن والإجمالي النهائي
+    function updateTotalWithShipping() {
+      if (cart.length === 0) return;
+      const subtotal = cart.reduce((acc, curr) => acc + curr.price, 0);
+      const shipping = parseInt(document.getElementById('custGov').value) || 50;
+      document.getElementById('shippingCost').innerText = `LE ${shipping}.00 EGP`;
+      document.getElementById('cartFinalTotal').innerText = `LE ${subtotal + shipping}.00 EGP`;
+    }
+
+    // 9. تجهيز وإرسال الطلب عبر الواتساب بدون أخطاء الترميز
+    function submitOrderViaWhatsApp() {
+      if (cart.length === 0) return alert('Your bag is empty');
+
+      const name = document.getElementById('custName').value.trim();
+      const phone = document.getElementById('custPhone').value.trim();
+      const govSelect = document.getElementById('custGov');
+      const govName = govSelect.options[govSelect.selectedIndex].text;
+      const shippingCost = parseInt(govSelect.value);
+      const address = document.getElementById('custAddress').value.trim();
+
+      if (!name || !phone || !address) {
+        return alert('Please fill in all shipping details (Name, Phone, Address)');
+      }
+
+      const subtotal = cart.reduce((acc, curr) => acc + curr.price, 0);
+      const finalTotal = subtotal + shippingCost;
+      const itemsText = cart.map((item, i) => `${i + 1}- ${item.name} (LE ${item.price}.00 EGP)`).join('%0a');
+
+      const message = 
+        `New Order from LAMSA Store%0a%0a` +
+        `Customer Details:%0a` +
+        `- Name: ${encodeURIComponent(name)}%0a` +
+        `- Mobile: ${encodeURIComponent(phone)}%0a` +
+        `- Governorate: ${encodeURIComponent(govName)}%0a` +
+        `- Address: ${encodeURIComponent(address)}%0a%0a` +
+        `Requested Products:%0a${itemsText}%0a%0a` +
+        `Final Total Summary:%0a` +
+        `- Products: LE ${subtotal}.00 EGP%0a` +
+        `- Shipping: LE ${shippingCost}.00 EGP%0a` +
+        `- Total Amount to be Paid upon Delivery: LE ${finalTotal}.00 EGP`;
+
+      const storeWhatsAppNumber = "201060746804";
+      window.open(`https://wa.me/${storeWhatsAppNumber}?text=${message}`, '_blank');
+    }
+
+    // تشغيل جلب المنتجات فور فتح الصفحة
+    fetchProducts();
+  </script>
+</body>
+</html>
